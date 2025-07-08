@@ -13,7 +13,7 @@ class GuestBook {
     }
 
     public function append(string $text) {
-        $this->records[] = $text . "\n";
+        $this->records[] = $text;
     }
 
     public function delete($index) {
@@ -21,6 +21,6 @@ class GuestBook {
     }
 
     public function save() {
-        file_put_contents($this->path_to_book, implode('', $this->records));
+        file_put_contents($this->path_to_book, implode("\n", $this->records));
     }
 }
