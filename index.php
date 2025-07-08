@@ -1,6 +1,14 @@
 <?php
 require(__DIR__ . '/autoload.php');
 
+$book = new GuestBook(__DIR__ . '/books/book1.txt');
 
-$b = new GuestBook(__DIR__ . '/books/book1.txt');
-var_dump($b);
+foreach ($book->getData() as $record) {
+    echo $record . '<hr>';
+}
+?>
+
+<form name="add" action="/add.php">
+    <input type="text" name="record">
+    <button type="submit">Добавить запись</button>
+</form>
