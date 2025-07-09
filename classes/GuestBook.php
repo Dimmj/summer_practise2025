@@ -6,7 +6,6 @@ class GuestBook {
     public function __construct(string $path) {
         $this->path_to_book = $path;
         $this->records = file($path, FILE_IGNORE_NEW_LINES);
-        var_dump($this->records);
     }
 
     public function getData(): array{
