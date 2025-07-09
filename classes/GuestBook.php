@@ -1,26 +1,33 @@
 <?php
 class GuestBook {
     protected array $records;
-    protected string $path_to_book;
+    protected $dbh;
 
-    public function __construct(string $path) {
-        $this->path_to_book = $path;
-        $this->records = file($path, FILE_IGNORE_NEW_LINES);
+    public function __construct() {
+        $this->dbh = new PDO('pgsql:host=localhost;port=5432;dbname=guest_books', 'postgres', '0000');
+        $sql = 'select * from guest_book1';
+        $sth = $this->dbh->prepare($sql);
+        $sth->execute();
+        $this->records = $sth->fetchAll();
     }
 
     public function getData(): array{
         return $this->records;
     }
 
-    public function append(string $text) {
-        $this->records[] = $text;
-    }
-
-    public function delete($index) {
-        unset($this->records[$index]);
+    public function append(string $username, string $date) {
+        $this->records[] = ['username' => $username, 'date_record' => $date];
     }
 
     public function save() {
-        file_put_contents($this->path_to_book, implode("\n", $this->records));
+        $sql = 'delete from guest_book1';
+        $sth = $this->dbh->prepare($sql);
+        $sth->execute();
+
+        foreach ($this->records as $index => $record) {
+            $new_sql = 'insert into guest_book1(id_record, username, date_record) values(:id_rec, :username, :date)';
+            $sth = $this->dbh->prepare($new_sql);
+            $sth->execute([':id_rec' => $index + 1,':username' => $record['username'], ':date' => $record['date_record']]);
+        }
     }
 }
