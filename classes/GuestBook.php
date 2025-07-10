@@ -24,9 +24,9 @@ class GuestBook {
         $sth = $this->dbh->prepare($sql);
         $sth->execute();
 
+        $new_sql = 'insert into guest_book1(id_record, username, date_record) values(:id_rec, :username, :date)';
+        $sth = $this->dbh->prepare($new_sql);
         foreach ($this->records as $index => $record) {
-            $new_sql = 'insert into guest_book1(id_record, username, date_record) values(:id_rec, :username, :date)';
-            $sth = $this->dbh->prepare($new_sql);
             $sth->execute([':id_rec' => $index + 1,':username' => $record['username'], ':date' => $record['date_record']]);
         }
     }
